@@ -1,0 +1,11 @@
+heap first
+new a 2
+new b 1
+new w 1
+new c 2
+new d 2
+del w
+exibe
+exibe
+del c
+exibe

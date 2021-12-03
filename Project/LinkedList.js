@@ -1,102 +1,131 @@
-class LinkedList {
-    constructor(){
-        this.head = null;
+const Node = require('./Node')
+
+// constructor(position, freeSpace){
+//     this.position = position;
+//     this.freeSpace = freeSpace;
+//     this.next = null;
+// }
+
+module.exports = class LinkedList {
+
+    constructor(heapSize){
+        this.head = new Node(0, heapSize);
         this.size = 0;
-    }
+        this.getLast = this.getLast.bind(this)
+        this.print = this.print.bind(this)
+        this.check_space_after = this.check_space_after.bind(this)
+        this.check_space_before = this.check_space_before.bind(this)
+        this.check_space_near_before = this.check_space_near_before.bind(this)
 
-    Add(nodeSize){
-        if(nodeSize <= 0){
-            return console.log("Please enter a valid node size.");
-        }
-
-        var current;
         
-        if (this.head == null){
-            this.head = new Node(0, nodeSize);;
+    }
+
+    // print Node
+
+    print(){
+        let curr = this.head;      
+        console.log(curr.position, curr.freeSpace);
+        while(curr.next){
+            curr = curr.next;
+            console.log(curr.position, curr.freeSpace);
         }
-        else {
-            current = this.head;
-      
-            while (current.next) {
-                current = current.next;
+    }
+
+    // helper Methods
+
+    add(newNode){
+        const lastNode = this.getLast();
+        lastNode.next = newNode
+        // var curr;
+        // if(this.head == null || this.head.position >= newNode.position){
+        //     newNode.next = this.head
+        //     this.head = newNode
+        // } else{
+        //     curr = this.head;
+        //     while(curr.next !== null && curr.next.position < new.)
+        // }
+    }
+
+
+
+    getFirst() {
+        return this.head;
+    }
+
+    remove(pos){
+        if(this.size() === 0){
+            console.log('list is empty')
+        }
+        if(this.head.position === pos){
+            this.head = this.head.next
+        }
+        var prev = this.head;
+        var curr = this.head;
+        while(curr){
+            if(curr.position === pos){
+                prev.next  = curr.next
+                return
             }
-      
-            current.next = new Node(current.position + current.size, nodeSize);
+            prev = curr
+
         }
-        this.size++;
+
     }
 
-    InsertAt(index, nodeSize){
-        if (index < 0 || index > this.size){
-            return console.log("Please enter a valid index.");
+    size() {
+        let count = 0; 
+        let node = this.head;
+        while (node) {
+            count++;
+            node = node.next
         }
-        
-        var node = new Node(nodeSize);
+        return count;
+    }
 
-        if (index == 0) {
-            node.next = this.head;
-            this.head = node;
-        } 
-        else {
-            var current = this.head;
-            var previous;
-            var counter = 0;
-
-            while (counter < index) {
-                counter++;
-                previous = current;
-                current = current.next;
+    getLast() {
+        let lastNode = this.head;
+        if (lastNode) {
+            while (lastNode.next) {
+                lastNode = lastNode.next
             }
-
-            node.next = current;
-            previous.next = node;
         }
-
-        this.size++;
+        return lastNode
     }
 
-    RemoveFrom(index){
-        if (index < 0 || index >= this.size){
-            return console.log("Please Enter a valid index");
-        }
-
-        var current = this.head;
-        var previous = current;
-        var counter = 0;
-
-        if (index === 0) {
-            this.head = current.next;
-        } 
-        else {
-            while (counter < index) {
-                counter++;
-                previous = current;
-                current = current.next;
+    check_space_after(pos){
+        let curr = this.head;
+        while(curr.next){
+            if(curr.position > pos){
+                return true
             }
-
-            previous.next = current.next;
+            curr = curr.next
         }
-
-        this.size--;
-
-        return current;
+        return false
     }
 
-    PrintList(){
-        if (this.size == 0){
-            return console.log("List is empty");
+
+    check_space_before(pos){
+        let curr = this.head;
+        while(curr.next){
+            if(curr.position < pos){
+                return true
+            }
+            curr = curr.next
         }
-
-        var current = this.head;
-
-        while (current != null){
-            console.log("Element:");
-
-            console.log("   Position: ", current.position);
-            console.log("   Size: ", current.size);
-            console.log("   Free Space: ", current.freeSpace);
-
-            current = current.next;
-        }
+        return false
     }
+
+    check_space_near_before(pos){
+        let curr = this.head;
+        while(curr.next){
+            if(curr.position + curr.freeSpace == pos){
+                return true
+            }
+            curr = curr.next
+        }
+        return false
+    }
+
+
+
 }
