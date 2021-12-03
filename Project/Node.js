@@ -1,9 +1,8 @@
 
-class Node {
-	constructor(position, size){
+module.exports = class Node {
+	constructor(position, freeSpace){
         this.position = position;
-        this.size = size;
-        this.freeSpace = size;
+        this.freeSpace = freeSpace;
 		this.next = null;
 	}
 }
